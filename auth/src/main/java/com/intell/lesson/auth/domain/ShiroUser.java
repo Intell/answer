@@ -1,17 +1,12 @@
 package com.intell.lesson.auth.domain;
 
-import java.io.Serializable;
-
 /**
  * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
  */
-public class ShiroUser implements Serializable {
+public class ShiroUser extends Lesson {
 
-    private String id;
 
     private String loginName;
-
-    private String realName;
 
     private String password;
 
@@ -22,6 +17,21 @@ public class ShiroUser implements Serializable {
     private boolean rememberMe;
 
     private int rememberMeValue;
+
+    /**
+     * 0:正常；1：禁止
+     */
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+
 
     public String getPassword() {
         return password;
@@ -47,28 +57,12 @@ public class ShiroUser implements Serializable {
         this.rememberMeValue = rememberMeValue;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getLoginName() {
         return loginName;
     }
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
     }
 
     public String getHost() {
@@ -87,14 +81,5 @@ public class ShiroUser implements Serializable {
         this.orgId = orgId;
     }
 
-    public ShiroUser(String userName, String realName, String host, String orgId) {
-        this.loginName = userName;
-        this.realName = realName;
-        this.host = host;
-        this.orgId = orgId;
-    }
 
-    public ShiroUser() {
-
-    }
 }

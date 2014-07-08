@@ -1,6 +1,7 @@
 package com.intell.lesson.auth.realm;
 
-import com.inteliTech.auth.filter.CaptchaAuthenticationFilter;
+
+import com.intell.lesson.auth.filter.CaptchaAuthenticationFilter;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
