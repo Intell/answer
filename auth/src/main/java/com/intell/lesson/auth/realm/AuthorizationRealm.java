@@ -5,7 +5,6 @@ import com.intell.lesson.auth.domain.Principal;
 import com.intell.lesson.auth.domain.Role;
 import com.intell.lesson.auth.domain.ShiroUser;
 import com.intell.lesson.auth.service.AuthService;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -14,6 +13,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,8 @@ import java.util.List;
  */
 
 public abstract class AuthorizationRealm extends AuthorizingRealm {
+
+
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationRealm.class.getName());
 
@@ -72,8 +74,8 @@ public abstract class AuthorizationRealm extends AuthorizingRealm {
             }
         }
         //添加默认的roles到roels
-        if (CollectionUtils.isNotEmpty(defaultRoles)) {
-            CollectionUtils.addAll(roles, defaultRoles.iterator());
+        if (!CollectionUtils.isEmpty(defaultRoles)) {
+            roles.addAll(defaultRoles);
         }
         //将当前用户拥有的roles设置到SimpleAuthorizationInfo中
         info.addRoles(roles);
@@ -95,8 +97,8 @@ public abstract class AuthorizationRealm extends AuthorizingRealm {
             }
         }
         //添加默认的permissions到permissions
-        if (CollectionUtils.isNotEmpty(defaultPermissions)) {
-            CollectionUtils.addAll(permissions, defaultPermissions.iterator());
+        if (!CollectionUtils.isEmpty(defaultPermissions)) {
+            permissions.addAll(defaultPermissions);
         }
         //将当前用户拥有的permissions设置到SimpleAuthorizationInfo中
         info.addStringPermissions(permissions);
@@ -111,7 +113,9 @@ public abstract class AuthorizationRealm extends AuthorizingRealm {
      */
     public void setDefaultPermissionString(String defaultPermissionString) {
         String[] perms = StringUtils.split(defaultPermissionString, ",");
-        CollectionUtils.addAll(defaultPermissions, perms);
+        for (String perm : perms) {
+            defaultPermissions.add(perm);
+        }
     }
 
     /**
@@ -121,7 +125,9 @@ public abstract class AuthorizationRealm extends AuthorizingRealm {
      */
     public void setDefaultRoleString(String defaultRoleString) {
         String[] roles = StringUtils.split(defaultRoleString, ",");
-        CollectionUtils.addAll(defaultRoles, roles);
+        for (String role : roles) {
+            defaultRoles.add(role);
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ package com.intell.lesson.auth.domain;
  */
 public class Principal extends Lesson {
 
+    private static final long serialVersionUID = -1413017086065918262L;
     private String code;
 
     public String getCode() {

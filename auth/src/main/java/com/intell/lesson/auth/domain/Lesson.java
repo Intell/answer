@@ -8,6 +8,7 @@ import java.util.Date;
  */
 public class Lesson implements Serializable {
 
+    private static final long serialVersionUID = -7513357473024994256L;
     private long id;
 
     private String name;

@@ -5,4 +5,5 @@ package com.intell.lesson.auth.domain;
  */
 public class Role extends Lesson {
 
+    private static final long serialVersionUID = 2522337852098323283L;
 }

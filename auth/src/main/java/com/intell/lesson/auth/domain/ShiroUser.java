@@ -5,6 +5,7 @@ package com.intell.lesson.auth.domain;
  */
 public class ShiroUser extends Lesson {
 
+    private static final long serialVersionUID = 1478054391212243452L;
 
     private String loginName;
 
@@ -30,7 +31,6 @@ public class ShiroUser extends Lesson {
     public void setStatus(int status) {
         this.status = status;
     }
-
 
 
     public String getPassword() {

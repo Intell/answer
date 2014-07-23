@@ -96,9 +96,9 @@ public class EncodesUtils {
 	/**
 	 * Xml 转码.
 	 */
-	public static String escapeXml(String xml) {
-		return StringEscapeUtils.escapeXml(xml);
-	}
+//	public static String escapeXml(String xml) {
+//		return StringEscapeUtils.escapeXml(xml);
+//	}
 
 	/**
 	 * Xml 解码.

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 用户注册的Controller.
  * 
@@ -22,7 +20,7 @@ public class RegisterController {
 
 	@RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-	public String register(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String register(RedirectAttributes redirectAttributes) {
 
 		return "redirect:/login";
 	}

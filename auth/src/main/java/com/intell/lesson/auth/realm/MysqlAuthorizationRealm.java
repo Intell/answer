@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author yr
  */
 
-public class MysqlAuthorizationRealm extends AuthorizationRealm {
+public class MysqlAuthorizationRealm extends AuthorizationRealm   {
 
     private static final Logger logger = LoggerFactory.getLogger(MysqlAuthorizationRealm.class.getName());
 
@@ -53,8 +53,7 @@ public class MysqlAuthorizationRealm extends AuthorizationRealm {
             String encodedSalt ="";
             byte[] salt = EncodesUtils.decodeBase64(encodedSalt);
             return new SimpleAuthenticationInfo(user,
-                    user.getPassword(), ByteSource.Util.bytes(salt), getName()) {
-            };
+                    user.getPassword(), ByteSource.Util.bytes(salt), getName());
         } else {
             throw new UnknownAccountException(token.getUsername() + " 用户名不存在.");
         }

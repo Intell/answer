@@ -30,7 +30,7 @@ public class ProfileController {
 	@RequestMapping(method = RequestMethod.POST)
     @ResponseBody
 	public String update(@RequestParam String userName,@RequestParam String password) {
-        Map user = new HashMap();
+        Map<String,Object> user = new HashMap<String,Object>();
         user.put("userName",userName);
         user.put("plainPassword",password);
 		return "redirect:/";

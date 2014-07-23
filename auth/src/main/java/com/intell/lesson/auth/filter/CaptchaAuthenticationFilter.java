@@ -1,13 +1,10 @@
 package com.intell.lesson.auth.filter;
 
 
-import com.intell.lesson.auth.domain.ShiroUser;
 import com.intell.lesson.auth.service.AuthService;
-import com.sun.javaws.CacheUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -17,8 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 验证码登录认证Filter
