@@ -1,0 +1,163 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+
+configure(allprojects) { project ->
+    group = "com.intell.lesson"
+    version = '1.0'
+    ext.gradleScriptDir = "${rootProject.projectDir}/gradle"
+    apply plugin: "java"
+    apply plugin: 'idea'
+    apply plugin: 'findbugs'
+
+    compileJava.options*.compilerArgs = [
+            "-Xlint:serial", "-Xlint:varargs", "-Xlint:cast", "-Xlint:classfile",
+            "-Xlint:dep-ann", "-Xlint:divzero", "-Xlint:empty", "-Xlint:finally",
+            "-Xlint:overrides", "-Xlint:path", "-Xlint:-processing", "-Xlint:static",
+            "-Xlint:try", "-Xlint:fallthrough", "-Xlint:rawtypes", "-Xlint:deprecation",
+            "-Xlint:unchecked", "-Xlint:-options", "-Werror"
+    ]
+
+    compileTestJava.options*.compilerArgs = [
+            "-Xlint:serial", "-Xlint:varargs", "-Xlint:cast", "-Xlint:classfile",
+            "-Xlint:dep-ann", "-Xlint:divzero", "-Xlint:empty", "-Xlint:finally",
+            "-Xlint:overrides", "-Xlint:path", "-Xlint:-processing", "-Xlint:static",
+            "-Xlint:try", "-Xlint:-fallthrough", "-Xlint:-rawtypes", "-Xlint:-deprecation",
+            "-Xlint:-unchecked", "-Xlint:-options"]
+
+    compileJava {
+        sourceCompatibility=1.8
+        targetCompatibility=1.8
+    }
+
+    compileTestJava {
+        sourceCompatibility=1.8
+        targetCompatibility=1.8
+        options.compilerArgs += "-parameters"
+    }
+
+    sourceSets.test.resources.srcDirs = ["src/test/resources", "src/test/java"]
+
+    test {
+        systemProperty("java.awt.headless", "true")
+        systemProperty("testGroups", project.properties.get("testGroups"))
+        scanForTestClasses = false
+        include(["**/*Tests.class", "**/*Test.class"])
+        exclude(["**/Abstract*.class", '**/*$*'])
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        mybatis       = "3.2.7"
+        mybatisSpring       = "1.2.2"
+        mysqlConnector= "5.1.31"
+        tomcatJdbc= "8.0.9"
+        spring= "4.0.6.RELEASE"
+        servletApi= "2.5"
+        aspectjrt= "1.5.4"
+        shiro="1.2.3"
+        jackson="2.4.1.1"
+        joda="2.3"
+        commonsLang3="3.3.2"
+        guava="17.0"
+        googleAviator="2.3.2"
+
+
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+        compile("org.mybatis:mybatis:${mybatis}")
+        compile('commons-codec:commons-codec:1.7')
+
+        compile("org.mybatis:mybatis-spring:${mybatisSpring}")
+        compile("mysql:mysql-connector-java:${mysqlConnector}")
+        compile("org.apache.tomcat:tomcat-jdbc:${tomcatJdbc}")
+        compile("org.springframework:spring-core:${spring}")
+        compile("org.springframework:spring-beans:${spring}")
+        compile("org.springframework:spring-aspects:${spring}")
+        compile("org.springframework:spring-context:${spring}")
+        compile("org.springframework:spring-context-support:${spring}")
+        compile("org.springframework:spring-aop:${spring}")
+        compile("org.springframework:spring-tx:${spring}")
+        compile("org.springframework:spring-web:${spring}")
+        compile("org.springframework:spring-webmvc:${spring}")
+        runtime("javax.servlet:servlet-api:${servletApi}")
+        compile("org.aspectj:aspectjrt:${aspectjrt}")
+        compile("org.aspectj:aspectjweaver:${aspectjrt}")
+        compile("org.apache.shiro:shiro-core:${shiro}")
+        compile("org.apache.shiro:shiro-spring:${shiro}")
+        compile("org.apache.shiro:shiro-web:${shiro}")
+        compile("org.apache.shiro:shiro-ehcache:${shiro}")
+        compile("org.apache.shiro:shiro-quartz:${shiro}")
+        compile("com.fasterxml.jackson.core:jackson-core:${jackson}")
+        compile("com.fasterxml.jackson.core:jackson-databind:${jackson}")
+        compile("joda-time:joda-time:${joda}")
+        compile("org.apache.commons:commons-lang3:${commonsLang3}")
+        compile("com.google.guava:guava:${guava}")
+        compile("com.googlecode.aviator:aviator:${googleAviator}")
+    }
+}
+
+
+
+project("auth") {
+    description = "auth"
+
+    ext {
+        mybatis       = "3.2.7"
+        mybatisSpring       = "1.2.2"
+        mysqlConnector= "5.1.31"
+        tomcatJdbc= "8.0.9"
+        spring= "4.0.6.RELEASE"
+        servletApi= "2.5"
+        aspectjrt= "1.5.4"
+        shiro="1.2.3"
+        jackson="2.4.1.1"
+        joda="2.3"
+        commonsLang3="3.3.2"
+        guava="17.0"
+        googleAviator="2.3.2"
+    }
+    dependencies {
+        compile("javax.servlet:servlet-api:${servletApi}")
+        compile("javax.servlet:jstl:1.2")
+    }
+}
+
+project("admin") {
+    description = "admin"
+    dependencies {
+        compile(project(":auth"))
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
