@@ -16,6 +16,7 @@ configure(allprojects) { project ->
     apply plugin: 'idea'
     apply plugin: 'findbugs'
 
+
     compileJava.options*.compilerArgs = [
             "-Xlint:serial", "-Xlint:varargs", "-Xlint:cast", "-Xlint:classfile",
             "-Xlint:dep-ann", "-Xlint:divzero", "-Xlint:empty", "-Xlint:finally",
@@ -32,13 +33,13 @@ configure(allprojects) { project ->
             "-Xlint:-unchecked", "-Xlint:-options"]
 
     compileJava {
-        sourceCompatibility=1.8
-        targetCompatibility=1.8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     compileTestJava {
-        sourceCompatibility=1.8
-        targetCompatibility=1.8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
         options.compilerArgs += "-parameters"
     }
 
@@ -57,19 +58,19 @@ configure(allprojects) { project ->
     }
 
     ext {
-        mybatis       = "3.2.7"
-        mybatisSpring       = "1.2.2"
-        mysqlConnector= "5.1.31"
-        tomcatJdbc= "8.0.9"
-        spring= "4.0.6.RELEASE"
-        servletApi= "2.5"
-        aspectjrt= "1.5.4"
-        shiro="1.2.3"
-        jackson="2.4.1.1"
-        joda="2.3"
-        commonsLang3="3.3.2"
-        guava="17.0"
-        googleAviator="2.3.2"
+        mybatis = "3.2.7"
+        mybatisSpring = "1.2.2"
+        mysqlConnector = "5.1.31"
+        tomcatJdbc = "8.0.9"
+        spring = "4.0.6.RELEASE"
+        servletApi = "2.5"
+        aspectjrt = "1.5.4"
+        shiro = "1.2.3"
+        jackson = "2.4.1.1"
+        joda = "2.3"
+        commonsLang3 = "3.3.2"
+        guava = "17.0"
+        googleAviator = "2.3.2"
 
 
     }
@@ -78,7 +79,6 @@ configure(allprojects) { project ->
         testCompile group: 'junit', name: 'junit', version: '4.11'
         compile("org.mybatis:mybatis:${mybatis}")
         compile('commons-codec:commons-codec:1.7')
-
         compile("org.mybatis:mybatis-spring:${mybatisSpring}")
         compile("mysql:mysql-connector-java:${mysqlConnector}")
         compile("org.apache.tomcat:tomcat-jdbc:${tomcatJdbc}")
@@ -114,19 +114,19 @@ project("auth") {
     description = "auth"
 
     ext {
-        mybatis       = "3.2.7"
-        mybatisSpring       = "1.2.2"
-        mysqlConnector= "5.1.31"
-        tomcatJdbc= "8.0.9"
-        spring= "4.0.6.RELEASE"
-        servletApi= "2.5"
-        aspectjrt= "1.5.4"
-        shiro="1.2.3"
-        jackson="2.4.1.1"
-        joda="2.3"
-        commonsLang3="3.3.2"
-        guava="17.0"
-        googleAviator="2.3.2"
+        mybatis = "3.2.7"
+        mybatisSpring = "1.2.2"
+        mysqlConnector = "5.1.31"
+        tomcatJdbc = "8.0.9"
+        spring = "4.0.6.RELEASE"
+        servletApi = "2.5"
+        aspectjrt = "1.5.4"
+        shiro = "1.2.3"
+        jackson = "2.4.1.1"
+        joda = "2.3"
+        commonsLang3 = "3.3.2"
+        guava = "17.0"
+        googleAviator = "2.3.2"
     }
     dependencies {
         compile("javax.servlet:servlet-api:${servletApi}")
@@ -136,6 +136,7 @@ project("auth") {
 
 project("admin") {
     description = "admin"
+    apply plugin: "war"
     dependencies {
         compile(project(":auth"))
 
