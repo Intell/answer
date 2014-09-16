@@ -3,7 +3,7 @@ package com.intell.lesson.auth.domain;
 /**
  * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
  */
-public class ShiroUser extends Lesson {
+public class ShiroUser extends BaseEntity {
 
     private static final long serialVersionUID = 1478054391212243452L;
 

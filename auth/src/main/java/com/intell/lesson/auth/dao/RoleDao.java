@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface RoleDao {
 
-    @Select("select *from User")
+    @Select("select *from role  where id in (select role_id from  user_role where user_id =${userId})")
     public List<Role> findRolesByUserId(long userId);
 }

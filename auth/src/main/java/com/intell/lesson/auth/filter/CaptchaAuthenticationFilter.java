@@ -1,8 +1,10 @@
 package com.intell.lesson.auth.filter;
 
 
+import com.intell.lesson.auth.domain.ShiroUser;
 import com.intell.lesson.auth.service.AuthService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.session.Session;
@@ -21,7 +23,7 @@ import javax.servlet.ServletResponse;
  * @author vincent
  */
 
-@Component
+@Component(value = "captchaAuthenticationFilter")
 public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
 
     @Autowired
@@ -55,7 +57,7 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
     private String sessionShowCaptchaKeyAttribute = DEFAULT_SHOW_CAPTCHA_KEY_ATTRIBUTE;
 
     //允许无验证码登录的最大次数，当登录次数大于该数值时，会在页面中显示验证码
-    private Integer captchaLoginNum = 10;
+    private Integer captchaLoginNum = 2;
 
     //允许登录的最大次数，当登录次数大于该数值时，账户锁定
     private Integer maxLoginAttemptNum = 5;
@@ -72,12 +74,12 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-//        if (!allowConcurrentLogin || !allowLocalReLogin) {
-//            if (checkLoginAttempt(request, response)) {
-//                //返回true，表示结束后续的所有filter执行
-//                return true;
-//            }
-//        }
+        if (!allowConcurrentLogin || !allowLocalReLogin) {
+            if (checkLoginAttempt(request, response)) {
+                //返回true，表示结束后续的所有filter执行
+                return true;
+            }
+        }
         Session session =SecurityUtils.getSubject().getSession();
         //获取登录次数
         Integer number = (Integer) session.getAttribute(getLoginNumKeyAttribute());
@@ -213,26 +215,22 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
         this.captchaLoginNum = captchaLoginNum;
     }
 
-//    private boolean checkLoginAttempt(ServletRequest request, ServletResponse response) {
-//        if (!allowConcurrentLogin || !allowLocalReLogin) {
-//            String username = getUsername(request);
-//            Cache cache = CacheUtil.getAuthorizationCache();
-//            if (cache == null) {
-//                return false;
-//            }
-//            String loginIp = (String) cache.get(username);
-//            if (loginIp != null) {
-//                if (loginIp.equals(getHost(request))) {
-//                    if (!allowLocalReLogin) {
-//                        return super.onLoginFailure(null, new ConcurrentAccessException("该用户当前已通过本ip地址登录，重复登录无效！"), request, response);
-//                    }
-//                } else if (!allowConcurrentLogin) {
-//                    return super.onLoginFailure(null, new ConcurrentAccessException("该用户当前已通过其他的ip地址登录，请认真核查本账号安全！"), request, response);
-//                }
-//            }
-//        }
-//        return false;
-//    }
+    private boolean checkLoginAttempt(ServletRequest request, ServletResponse response) {
+        if (!allowConcurrentLogin || !allowLocalReLogin) {
+            String username = getUsername(request);
+            ShiroUser user= (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+            if (StringUtils.isEmpty(user.getHost())) {
+                if (user.getHost().equals(getHost(request))) {
+                    if (!allowLocalReLogin) {
+                        return super.onLoginFailure(null, new ConcurrentAccessException("该用户当前已通过本ip地址登录，重复登录无效！"), request, response);
+                    }
+                } else if (!allowConcurrentLogin) {
+                    return super.onLoginFailure(null, new ConcurrentAccessException("该用户当前已通过其他的ip地址登录，请认真核查本账号安全！"), request, response);
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * 重写父类方法，当登录失败将异常信息设置到request的attribute中
@@ -273,21 +271,12 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
         Session session = subject.getSession(false);
         session.removeAttribute(getLoginNumKeyAttribute());
         session.removeAttribute(getSessionShowCaptchaKeyAttribute());
-//        Cache shiroCache = CacheUtil.getAuthorizationCache();
-//        if (shiroCache != null) {
-//            shiroCache.put(SessionHolder.getUser().getLoginName(), SessionHolder.getUser().getHost());
-//        } else {
-//            Map userMap = new HashMap();
-//            userMap.put(SessionHolder.getUser().getLoginName(), SessionHolder.getUser().getHost());
-//            CacheUtil.onLineUserList.add(userMap);
-//        }
         return super.onLoginSuccess(token, subject, request, response);
     }
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         Subject subject = SecurityUtils.getSubject();
-
         //如果是登陆服务，重新登陆
         if (isLoginRequest(request, response)) {
             return false;
@@ -305,18 +294,18 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
         String password = "";
         boolean rememberMe = false;
         Integer rememberMeCookieValue = null;
-//        if (!subject.isAuthenticated() && subject.isRemembered()) {
-//            ShiroUser shiroUser = (ShiroUser) subject.getPrincipal();
-//            if (null != shiroUser) {
-//                Map user = accountService.fetchUserByUsername(shiroUser.getLoginName());
-//                username = shiroUser.getLoginName();
-//                password = shiroUser.getPassword();
-//                rememberMe = true;
-//                rememberMeCookieValue = shiroUser.getRememberMeValue();
-//                String host = getHost(request);
-//                return new UsernamePasswordTokeExtend(username, password, rememberMe, host, rememberMeCookieValue);
-//            }
-//        }
+        if (!subject.isAuthenticated() && subject.isRemembered()) {
+            ShiroUser shiroUser = (ShiroUser) subject.getPrincipal();
+            if (null != shiroUser) {
+                ShiroUser user = authService.findUserByUserName(shiroUser.getLoginName());
+                username = shiroUser.getLoginName();
+                password = shiroUser.getPassword();
+                rememberMe = true;
+                rememberMeCookieValue = shiroUser.getRememberMeValue();
+                String host = getHost(request);
+                return new UsernamePasswordTokeExtend(username, password, rememberMe, host, rememberMeCookieValue);
+            }
+        }
         username = getUsername(request);
         password = getPassword(request);
         String rememberMeValue = request.getParameter(getRememberMeParam());
@@ -324,7 +313,7 @@ public class CaptchaAuthenticationFilter extends FormAuthenticationFilter {
             rememberMe = true;
             rememberMeCookieValue = 2592000;
             //如果提交的rememberMe参数存在值,将rememberMe设置成true
-//            rememberMeCookieValue = NumberUtils.toInt(rememberMeValue);
+            rememberMeCookieValue = NumberUtils.toInt(rememberMeValue);
         }
         String host = getHost(request);
         return new UsernamePasswordTokeExtend(username, password, rememberMe, host, rememberMeCookieValue);

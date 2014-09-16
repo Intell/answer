@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zhutao on 14-7-8.
@@ -13,10 +12,7 @@ import java.util.Set;
 @Repository
 public interface PrincipalDao {
 
-    @Select("select *from User")
-    public List<Principal> findPrincipalsByRoleId(long roleId);
-
-    @Select("select *from User")
-    public List<Principal> findPrincipalsByRoleIds(Set<Long> roleIds);
+    @Select("select * from principal  where id in (select principal_id from role_principal where role_id in (select role_id from  user_role where user_id =${userId}) )")
+    public List<Principal> findPrincipalsByUserId(long userId);
 
 }

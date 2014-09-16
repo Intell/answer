@@ -21,5 +21,5 @@ create  table principal(
 
 create table role_principal(
   role_id int,
-  principal int
+  principal_id int
 )

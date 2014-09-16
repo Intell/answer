@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -13,24 +12,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author yr
  */
 @Controller
-@RequestMapping(value = "/register")
+@RequestMapping(value = "/signup")
 public class RegisterController {
 
 
 
-	@RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
+	@RequestMapping(method = RequestMethod.GET)
 	public String register(RedirectAttributes redirectAttributes) {
-
-		return "redirect:/login";
+		return "signup";
 	}
 
 	/**
 	 * Ajax请求校验loginName是否唯一。
 	 */
-	@RequestMapping(value = "checkLoginName")
-	@ResponseBody
+	@RequestMapping(value = "/registor",method = RequestMethod.POST)
 	public String checkLoginName(@RequestParam("username") String username) {
-		return "";
+		return "redirect:/login";
 	}
 }

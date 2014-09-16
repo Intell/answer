@@ -5,8 +5,6 @@ import com.intell.lesson.auth.domain.ShiroUser;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 
 
 /**
@@ -15,9 +13,6 @@ import java.util.List;
 @Repository
 public interface UserDao {
 
-    @Select("select *from User")
-    public List<ShiroUser> findAll();
-
-    @Select("select *from User")
+    @Select("select *from User where user_name=${userName}")
     public ShiroUser findUserByUserName(String userName);
 }
